@@ -2,11 +2,17 @@ package com.example.android.stockhawk.data;
 
 import android.renderscript.Element;
 
+import net.simonvt.schematic.annotation.AutoIncrement;
+import net.simonvt.schematic.annotation.DataType;
+import net.simonvt.schematic.annotation.NotNull;
+import net.simonvt.schematic.annotation.PrimaryKey;
+
 /**
  * Created by Peretz on 2016-08-10.
  */
 public class QuoteColumns {
-    @DataType(Element.DataType.Type.INTEGER) @PrimaryKey @AutoIncrement
+    @DataType(Element.DataType.Type.INTEGER) @PrimaryKey
+    @AutoIncrement
     public static final String _ID = "_id";
     @DataType(Element.DataType.Type.TEXT) @NotNull
     public static final String SYMBOL = "symbol";

@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.google.android.gms.gcm.TaskParams;
+
 /**
  * Created by Peretz on 2016-08-10.
  */

@@ -11,6 +11,12 @@ import android.util.Log;
 import com.example.android.stockhawk.data.QuoteColumns;
 import com.example.android.stockhawk.data.QuoteProvider;
 import com.example.android.stockhawk.rest.Utils;
+import com.google.android.gms.gcm.GcmNetworkManager;
+import com.google.android.gms.gcm.GcmTaskService;
+import com.google.android.gms.gcm.TaskParams;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

@@ -2,6 +2,11 @@ package com.example.android.stockhawk.data;
 
 import android.net.Uri;
 
+import net.simonvt.schematic.annotation.ContentProvider;
+import net.simonvt.schematic.annotation.ContentUri;
+import net.simonvt.schematic.annotation.InexactContentUri;
+import net.simonvt.schematic.annotation.TableEndpoint;
+
 /**
  * Created by Peretz on 2016-08-10.
  */
