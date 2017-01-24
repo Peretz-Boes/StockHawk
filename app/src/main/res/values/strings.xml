@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="http://schemas.android.com/tools">
     <string name="app_name">Stock Hawk</string>
 
     <string name="pref_stocks_initialized_key" translatable="false">initialized</string>
@@ -32,6 +32,16 @@
     <string name="toast_stock_added_no_connectivity">Symbol %s added. Will refresh when network available.</string>
     <string name="toast_no_connectivity">Will refresh when network available.</string>
     <string name="no_data_available">No data is available</string>
-    <string name="ally_position_symbol"></string>
+    <string name="stocks_widget_title">Current price of your stocks</string>
+    <string name="invalid_stock">The stock you entered is not recognized by the server.</string>
+    <string name="a11y_stock_symbol">Symbol:<xliff:g id="symbol">%1$s</xliff:g></string>
+    <string name="a11y_stock_price">Price:<xliff:g id="price">%1$s</xliff:g></string>
+    <string name="fab_content_description">Add stocks</string>
+    <string name="error_content_description">Error message</string>
+    <string name="symbol_content_description">Stock symbol</string>
+    <string name="price_content_description">Stock price</string>
+    <string name="change_content_description">Stock change</string>
+    <string name="stock_widget_icon_content_description">Stock widget icon</string>
+    <string name="stock_widget_content_description">Data of your stocks</string>
 
 </resources>
