@@ -1,6 +1,7 @@
 package com.udacity.stockhawk.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -12,6 +13,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,6 +40,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @BindView(R.id.error)
     TextView error;
     private StockAdapter adapter;
+    Cursor cursor;
+    public static final String[] STOCK_COLUMNS={Contract.Quote.COLUMN_SYMBOL,Contract.Quote.COLUMN_HISTORY};
+    String historicalStockSymbol;
+    String historicalStockData;
+    public static final String LOG_TAG=MainActivity.class.getSimpleName();
 
     @Override
     public void onClick(String symbol) {
@@ -48,16 +55,20 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
+        Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         ButterKnife.bind(this);
 
-        adapter = new StockAdapter(this, this);
+        adapter = new StockAdapter(this,this);
         stockRecyclerView.setAdapter(adapter);
         stockRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setRefreshing(true);
+        if(!networkUp()){
+            Toast.makeText(getApplicationContext(),R.string.error_no_network,Toast.LENGTH_LONG).show();
+        }
         onRefresh();
 
         QuoteSyncJob.initialize(this);
@@ -117,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             if (networkUp()) {
                 swipeRefreshLayout.setRefreshing(true);
             } else {
-                String message = getString(R.string.toast_stock_added_no_connectivity, symbol);
+                String message = getString(R.string.toast_stock_added_no_connectivity) +symbol;
                 Toast.makeText(this, message, Toast.LENGTH_LONG).show();
             }
 
@@ -131,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         return new CursorLoader(this,
                 Contract.Quote.URI,
                 Contract.Quote.QUOTE_COLUMNS,
-                null, null, Contract.Quote.COLUMN_SYMBOL);
+                null,null,Contract.Quote.COLUMN_SYMBOL);
     }
 
     @Override
@@ -168,6 +179,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main_activity_settings, menu);
+        MenuItem item=menu.findItem(R.id.action_change_units);
+        setDisplayModeMenuItemIcon(item);
         return true;
     }
 
@@ -180,9 +193,18 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_change_units) {
+            PrefUtils.toggleDisplayMode(this);
+            setDisplayModeMenuItemIcon(item);
+            adapter.notifyDataSetChanged();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+    public void viewHistoricalStockData(View view){
+        Intent intent=new Intent(MainActivity.this,HistoryActivity.class);
+        startActivity(intent);
+    }
+
 }

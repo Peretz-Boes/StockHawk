@@ -42,6 +42,12 @@
     <string name="price_content_description">Stock price</string>
     <string name="change_content_description">Stock change</string>
     <string name="stock_widget_icon_content_description">Stock widget icon</string>
-    <string name="stock_widget_content_description">Data of your stocks</string>
+    <string name="stock_widget_content_description">Current price of your stocks</string>
+    <string name="stock_history">Stock history</string>
+    <string name="title_activity_history">HistoryActivity</string>
+    <string name="stock_history_button_content_description">View history of stocks</string>
+    <string name="stock_history_instruction">View the history of your stocks</string>
+    <string name="no_stock_history_available">No historical stock data is available</string>
+    <string name="history_activity_name">HistoryActivity</string>
 
 </resources>

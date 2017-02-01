@@ -45,4 +45,5 @@
         android:visibility="gone"
         tools:text="Error message"
         android:contentDescription="@string/error_content_description"/>
+
 </merge>

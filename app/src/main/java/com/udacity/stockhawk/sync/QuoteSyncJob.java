@@ -8,7 +8,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.udacity.stockhawk.R;
 import com.udacity.stockhawk.data.Contract;
 import com.udacity.stockhawk.data.PrefUtils;
 
@@ -28,6 +32,9 @@ import yahoofinance.histquotes.HistoricalQuote;
 import yahoofinance.histquotes.Interval;
 import yahoofinance.quotes.stock.StockQuote;
 
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
+import static com.udacity.stockhawk.R.id.price;
+
 /**
  * Created by Peretz on 2016-12-26.
  */
@@ -39,7 +46,9 @@ public class QuoteSyncJob {
     private static final int PERIODIC_ID = 1;
     private static final int YEARS_OF_HISTORY = 2;
 
-    private QuoteSyncJob() {
+
+    public QuoteSyncJob() {
+
     }
 
     static void getQuotes(Context context) {
@@ -64,6 +73,7 @@ public class QuoteSyncJob {
             }
 
             Map<String, Stock> quotes = YahooFinance.get(stockArray);
+
             Iterator<String> iterator = stockCopy.iterator();
 
             Timber.d(quotes.toString());
@@ -72,11 +82,8 @@ public class QuoteSyncJob {
 
             while (iterator.hasNext()) {
                 String symbol = iterator.next();
-
-
                 Stock stock = quotes.get(symbol);
                 StockQuote quote = stock.getQuote();
-
                 float price = quote.getPrice().floatValue();
                 float change = quote.getChange().floatValue();
                 float percentChange = quote.getChangeInPercent().floatValue();
@@ -105,15 +112,14 @@ public class QuoteSyncJob {
 
                 quoteCVs.add(quoteCV);
 
-            }
+                context.getContentResolver()
+                        .bulkInsert(
+                                Contract.Quote.URI,
+                                quoteCVs.toArray(new ContentValues[quoteCVs.size()]));
 
-            context.getContentResolver()
-                    .bulkInsert(
-                            Contract.Quote.URI,
-                            quoteCVs.toArray(new ContentValues[quoteCVs.size()]));
-
-            Intent dataUpdatedIntent = new Intent(ACTION_DATA_UPDATED);
-            context.sendBroadcast(dataUpdatedIntent);
+                Intent dataUpdatedIntent = new Intent(ACTION_DATA_UPDATED).setPackage(context.getPackageName());
+                context.sendBroadcast(dataUpdatedIntent);
+        }
 
         } catch (IOException exception) {
             Timber.e(exception, "Error fetching stock quotes");
@@ -168,12 +174,6 @@ public class QuoteSyncJob {
 
 
         }
-    }
-
-    private void updateStockWidget(Context context){
-        context.getApplicationContext();
-        Intent intent=new Intent(ACTION_DATA_UPDATED).setPackage(context.getPackageName());
-        context.sendBroadcast(intent);
     }
 
 }

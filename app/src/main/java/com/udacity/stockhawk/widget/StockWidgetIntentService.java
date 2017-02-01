@@ -20,6 +20,8 @@ import com.udacity.stockhawk.ui.MainActivity;
  */
 public class StockWidgetIntentService extends IntentService {
 
+    private static final String[] STOCK_COLUMNS={Contract.Quote.COLUMN_SYMBOL,Contract.Quote.COLUMN_PRICE,Contract.Quote.COLUMN_ABSOLUTE_CHANGE,Contract.Quote.COLUMN_PERCENTAGE_CHANGE,Contract.Quote.COLUMN_HISTORY};
+
     public StockWidgetIntentService() {
         super("StockWidgetIntentService");
     }
