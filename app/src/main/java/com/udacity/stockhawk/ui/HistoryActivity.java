@@ -3,9 +3,11 @@ package com.udacity.stockhawk.ui;
 import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -32,6 +34,10 @@ public class HistoryActivity extends Activity implements LoaderManager.LoaderCal
         LineChart stockHistory=(LineChart) findViewById(R.id.stock_history_line_chart);
         ArrayList<String> stockTradingDates=new ArrayList<>();
         ArrayList<Entry> stockPrices=new ArrayList<>();
+        Intent intent=getIntent();
+        String stockSymbol=intent.getStringExtra("symbol");
+        TextView textView=(TextView)findViewById(R.id.stock_symbol_text_view);
+        textView.setText(stockSymbol);
     }
 
     @Override

@@ -203,7 +203,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     public void viewHistoricalStockData(View view){
+        TextView stockSymbolTextView=(TextView)findViewById(R.id.symbol);
+        String stockSymbol= (String) stockSymbolTextView.getText();
         Intent intent=new Intent(MainActivity.this,HistoryActivity.class);
+        intent.putExtra("symbol",stockSymbol);
         startActivity(intent);
     }
 

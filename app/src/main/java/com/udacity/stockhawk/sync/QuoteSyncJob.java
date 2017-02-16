@@ -8,8 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
-import android.widget.TextView;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.Toast;
 
 import com.udacity.stockhawk.R;
@@ -32,9 +32,6 @@ import yahoofinance.histquotes.HistoricalQuote;
 import yahoofinance.histquotes.Interval;
 import yahoofinance.quotes.stock.StockQuote;
 
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
-import static com.udacity.stockhawk.R.id.price;
-
 /**
  * Created by Peretz on 2016-12-26.
  */
@@ -51,13 +48,14 @@ public class QuoteSyncJob {
 
     }
 
-    static void getQuotes(Context context) {
+    static void getQuotes(final Context context) {
 
         Timber.d("Running sync job");
 
         Calendar from = Calendar.getInstance();
         Calendar to = Calendar.getInstance();
         from.add(Calendar.YEAR, -YEARS_OF_HISTORY);
+        Handler handler;
 
         try {
 
@@ -81,12 +79,27 @@ public class QuoteSyncJob {
             ArrayList<ContentValues> quoteCVs = new ArrayList<>();
 
             while (iterator.hasNext()) {
-                String symbol = iterator.next();
+                final String symbol = iterator.next();
                 Stock stock = quotes.get(symbol);
-                StockQuote quote = stock.getQuote();
-                float price = quote.getPrice().floatValue();
-                float change = quote.getChange().floatValue();
-                float percentChange = quote.getChangeInPercent().floatValue();
+                StockQuote quote=stock.getQuote();
+                String name=stock.getName();
+                if (name==null){
+                    PrefUtils.removeStock(context,symbol);
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(context,R.string.invalid_stock,Toast.LENGTH_LONG).show();
+                        }
+                    });
+                    Toast.makeText(context,R.string.invalid_stock,Toast.LENGTH_LONG).show();
+                    continue;
+                }
+                float price;
+                float change;
+                float percentChange;
+                    price = quote.getPrice().floatValue();
+                    change = quote.getChange().floatValue();
+                    percentChange = quote.getChangeInPercent().floatValue();
 
                 // WARNING! Don't request historical data for a stock that doesn't exist!
                 // The request will hang forever X_x
