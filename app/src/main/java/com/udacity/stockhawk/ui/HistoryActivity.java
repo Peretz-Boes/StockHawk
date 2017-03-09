@@ -2,11 +2,13 @@ package com.udacity.stockhawk.ui;
 
 import android.app.Activity;
 import android.app.LoaderManager;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +24,8 @@ import butterknife.ButterKnife;
 public class HistoryActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor>,StockAdapter.StockAdapterOnClickHandler {
 
     private static final int STOCK_HISTORY_LOADER=0;
+    private static final String LOG_TAG=HistoryActivity.class.getSimpleName();
+    private Context context;
     StockAdapter stockAdapter;
 
     @Override
@@ -49,8 +53,22 @@ public class HistoryActivity extends Activity implements LoaderManager.LoaderCal
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         if(cursor.getCount()==0){
             Toast.makeText(getApplicationContext(), R.string.no_stock_history_available,Toast.LENGTH_LONG).show();
+            return;
         }
-        stockAdapter.setCursor(cursor);
+
+        cursor=context.getContentResolver().query(Contract.Quote.URI,Contract.Quote.QUOTE_COLUMNS,null,null,null);
+
+        if(cursor!=null) {
+            while (cursor.moveToNext()) {
+                String[] stockTradingDatesAndPrices = Contract.Quote.COLUMN_HISTORY.split("\n");
+                for (int i = 0; i < stockTradingDatesAndPrices.length; i++) {
+                    Log.d(LOG_TAG, stockTradingDatesAndPrices[i]);
+                    String[] stockDatesOfTrading= stockTradingDatesAndPrices[i].split(", ");
+
+                }
+
+            }
+        }
     }
 
     @Override

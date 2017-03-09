@@ -6,8 +6,7 @@
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:onClick="viewHistoricalStockData">
+    android:paddingRight="16dp">
 
     <TextView
         android:id="@+id/symbol"
@@ -15,8 +14,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="start"
-        tools:text="GOOG"
         android:onClick="viewHistoricalStockData"
+        tools:text="GOOG"
         android:contentDescription="@string/symbol_content_description"/>
 
     <LinearLayout
