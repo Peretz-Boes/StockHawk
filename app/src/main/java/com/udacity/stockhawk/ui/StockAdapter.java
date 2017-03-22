@@ -3,6 +3,7 @@ package com.udacity.stockhawk.ui;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ class StockAdapter extends RecyclerView.Adapter<StockAdapter.StockViewHolder> {
     private final DecimalFormat percentageFormat;
     private Cursor cursor;
     private StockAdapterOnClickHandler clickHandler;
+    public static final String LOG_TAG=StockAdapter.class.getSimpleName();
 
     StockAdapter(Context context, StockAdapterOnClickHandler clickHandler) {
         this.context = context;
@@ -97,6 +99,7 @@ class StockAdapter extends RecyclerView.Adapter<StockAdapter.StockViewHolder> {
         int count = 0;
         if (cursor != null) {
             count = cursor.getCount();
+            Log.d(LOG_TAG,"Item count: "+count);
         }
         return count;
     }

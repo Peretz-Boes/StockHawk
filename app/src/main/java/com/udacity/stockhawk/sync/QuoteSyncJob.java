@@ -10,6 +10,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.udacity.stockhawk.R;
@@ -42,6 +43,7 @@ public class QuoteSyncJob {
     private static final int INITIAL_BACKOFF = 10000;
     private static final int PERIODIC_ID = 1;
     private static final int YEARS_OF_HISTORY = 2;
+    public static final String LOG_TAG=QuoteSyncJob.class.getSimpleName();
 
 
     public QuoteSyncJob() {
@@ -75,6 +77,7 @@ public class QuoteSyncJob {
             Iterator<String> iterator = stockCopy.iterator();
 
             Timber.d(quotes.toString());
+            Log.d(LOG_TAG,"Number of quotes "+quotes.size());
 
             ArrayList<ContentValues> quoteCVs = new ArrayList<>();
 

@@ -14,7 +14,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="start"
-        android:onClick="viewHistoricalStockData"
         tools:text="GOOG"
         android:contentDescription="@string/symbol_content_description"/>
 

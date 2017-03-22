@@ -1,10 +1,7 @@
 package com.udacity.stockhawk.ui;
 
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -25,10 +22,13 @@ import com.udacity.stockhawk.R;
 import com.udacity.stockhawk.data.Contract;
 import com.udacity.stockhawk.data.PrefUtils;
 import com.udacity.stockhawk.sync.QuoteSyncJob;
+import com.udacity.utils.NetworkUtility;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
+
+import static com.udacity.stockhawk.R.id.symbol;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>,SwipeRefreshLayout.OnRefreshListener,StockAdapter.StockAdapterOnClickHandler {
 
@@ -39,12 +39,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.error)
     TextView error;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     private StockAdapter adapter;
-    Cursor cursor;
-    public static final String[] STOCK_COLUMNS={Contract.Quote.COLUMN_SYMBOL,Contract.Quote.COLUMN_HISTORY};
-    String historicalStockSymbol;
-    String historicalStockData;
-    public static final String LOG_TAG=MainActivity.class.getSimpleName();
 
     @Override
     public void onClick(String symbol) {
@@ -56,9 +53,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         ButterKnife.bind(this);
+        setSupportActionBar(toolbar);
 
         adapter = new StockAdapter(this,this);
         stockRecyclerView.setAdapter(adapter);
@@ -66,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setRefreshing(true);
-        if(!networkUp()){
+        if(!NetworkUtility.isNetworkAvailable(getApplicationContext())){
             Toast.makeText(getApplicationContext(),R.string.error_no_network,Toast.LENGTH_LONG).show();
         }
         onRefresh();
@@ -89,23 +85,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }).attachToRecyclerView(stockRecyclerView);
     }
 
-    private boolean networkUp() {
-        ConnectivityManager cm =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-        return networkInfo != null && networkInfo.isConnectedOrConnecting();
-    }
-
     @Override
     public void onRefresh() {
 
         QuoteSyncJob.syncImmediately(this);
 
-        if (!networkUp() && adapter.getItemCount() == 0) {
+        if (!NetworkUtility.isNetworkAvailable(getApplicationContext()) && adapter.getItemCount() == 0) {
             swipeRefreshLayout.setRefreshing(false);
             error.setText(getString(R.string.error_no_network));
             error.setVisibility(View.VISIBLE);
-        } else if (!networkUp()) {
+        } else if (!NetworkUtility.isNetworkAvailable(getApplicationContext())) {
             swipeRefreshLayout.setRefreshing(false);
             Toast.makeText(this, R.string.toast_no_connectivity, Toast.LENGTH_LONG).show();
         } else if (PrefUtils.getStocks(this).size() == 0) {
@@ -125,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     void addStock(String symbol) {
         if (symbol != null && !symbol.isEmpty()) {
 
-            if (networkUp()) {
+            if (NetworkUtility.isNetworkAvailable(getApplicationContext())) {
                 swipeRefreshLayout.setRefreshing(true);
             } else {
                 String message = getString(R.string.toast_stock_added_no_connectivity) +symbol;
@@ -203,7 +192,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     public void viewHistoricalStockData(View view){
-        TextView stockSymbolTextView=(TextView)findViewById(R.id.symbol);
+        TextView stockSymbolTextView=(TextView)findViewById(symbol);
         String stockSymbol= (String) stockSymbolTextView.getText();
         Intent intent=new Intent(MainActivity.this,HistoryActivity.class);
         intent.putExtra("symbol",stockSymbol);
