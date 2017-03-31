@@ -49,5 +49,7 @@
     <string name="stock_history_instruction">View the history of your stocks</string>
     <string name="no_stock_history_available">No historical stock data is available</string>
     <string name="history_activity_name">HistoryActivity</string>
+    <string name="chart_label">Stock</string>
+    <string name="chart_description">A 2-year comparison of the stock</string>
 
 </resources>

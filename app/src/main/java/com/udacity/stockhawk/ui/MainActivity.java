@@ -28,8 +28,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-import static com.udacity.stockhawk.R.id.symbol;
-
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>,SwipeRefreshLayout.OnRefreshListener,StockAdapter.StockAdapterOnClickHandler {
 
     private static final int STOCK_LOADER = 0;
@@ -45,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onClick(String symbol) {
-        Timber.d("Symbol clicked: %s", symbol);
+        showHistoryGraphOfStock(symbol);
     }
 
 
@@ -191,11 +189,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         return super.onOptionsItemSelected(item);
     }
 
-    public void viewHistoricalStockData(View view){
-        TextView stockSymbolTextView=(TextView)findViewById(symbol);
-        String stockSymbol= (String) stockSymbolTextView.getText();
-        Intent intent=new Intent(MainActivity.this,HistoryActivity.class);
-        intent.putExtra("symbol",stockSymbol);
+    public void showHistoryGraphOfStock(String stockSymbol) {
+        Intent intent = new Intent(MainActivity.this, HistoryActivity.class);
+        intent.putExtra(HistoryActivity.EXTRA_SYMBOL, stockSymbol);
         startActivity(intent);
     }
 

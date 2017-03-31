@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:initialLayout="@layout/stock_widget_small"
-    android:minHeight="@dimen/stocks_widget_default_height"
-    android:minWidth="@dimen/stocks_widget_default_width"
+    android:minHeight="@dimen/widget_height"
+    android:minWidth="@dimen/widget_width"
     android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen">
 
