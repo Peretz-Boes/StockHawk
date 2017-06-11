@@ -1,15 +1,14 @@
 package com.udacity.utils;
 
-/**
- * Created by nadirhussain on 29/03/2017.
- */
-
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-public class Formatter {
+/**
+ * Created by Peretz on 2017-04-05.
+ */
 
+public class Formatter {
     static public String getDollarFormat(float price) {
         DecimalFormat dollarFormat = (DecimalFormat) NumberFormat.getCurrencyInstance(Locale.US);
         return dollarFormat.format(price);

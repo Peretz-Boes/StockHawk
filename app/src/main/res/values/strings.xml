@@ -51,5 +51,8 @@
     <string name="history_activity_name">HistoryActivity</string>
     <string name="chart_label">Stock</string>
     <string name="chart_description">A 2-year comparison of the stock</string>
+    <string name="empty_view_text">No stocks added.</string>
+    <string name="stock_widget_icon">Stock widget icon</string>
+    <string name="error_message">Error message</string>
 
 </resources>

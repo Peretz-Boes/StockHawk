@@ -33,7 +33,7 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.udacity.utils.Formatter.getDollarFormatWithPlus;
+import static com.udacity.utils.Formatter.getDollarFormat;
 
 public class HistoryActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -69,7 +69,6 @@ public class HistoryActivity extends AppCompatActivity implements LoaderManager.
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-        Log.d(LOG_TAG,"Symbol received in history activity "+symbol);
         getSupportLoaderManager().initLoader(STOCK_LOADER,null,this);
     }
 
@@ -82,7 +81,7 @@ public class HistoryActivity extends AppCompatActivity implements LoaderManager.
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data.getCount() != 0) {
             data.moveToFirst();
-            updateStockInfo("Stock Name", data.getFloat(Contract.Quote.POSITION_PRICE), data.getFloat(Contract.Quote.POSITION_ABSOLUTE_CHANGE), data.getFloat(Contract.Quote.POSITION_PERCENTAGE_CHANGE));
+            updateStockInfo("Stock Name "+symbol, data.getFloat(Contract.Quote.POSITION_PRICE), data.getFloat(Contract.Quote.POSITION_ABSOLUTE_CHANGE), data.getFloat(Contract.Quote.POSITION_PERCENTAGE_CHANGE));
             updateStockGraph(data.getString(Contract.Quote.POSITION_HISTORY));
         }
 
@@ -143,7 +142,7 @@ public class HistoryActivity extends AppCompatActivity implements LoaderManager.
 
     private void updateStockInfo(String name,float price,float change,float percentage){
         nameView.setText(name);
-        priceView.setText(getDollarFormatWithPlus(price));
+        priceView.setText(getDollarFormat(price));
         if (change>0){
             changeView.setBackgroundResource(R.drawable.percent_change_pill_green);
         }else {
